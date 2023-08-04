@@ -1,0 +1,30 @@
+---
+version: "2"
+services:
+  oinsta-xray-deamon:
+    container_name: oinsta-xray-deamon
+    hostname: oinstaxraydeamon
+    build: ./oinsta-xray-deamon
+    expose:
+      - 2000
+    ports:
+      - 2000:2000
+#
+#
+#
+#      
+  demo-docker-xray:
+    container_name: demo-docker-xray
+    hostname: demodockerxray
+    build:
+      context: ./demo-docker-xray
+    depends_on:
+      - oinsta-xray-deamon
+    links:
+      - oinsta-xray-deamon:oinstaxraydeamon
+    environment:
+      - AWS_XRAY_DAEMON_ADDRESS=oinsta-xray-deamon:2000
+    expose:
+      - 9900
+    ports:
+      - 9900:9900
